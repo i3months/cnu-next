@@ -25,7 +25,7 @@ export const UserContext = createContext<UserContextType | undefined>(
 // 2. Provider 생성
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>({
-    userId: "202102706",
+    userId: "202102706 정준모",
     name: "jeongjoonmo",
     age: 1,
     phoneNumber: "010-1234-1234",
