@@ -1,4 +1,6 @@
 // CheckoutPage
+"use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ProductItem } from "@/types/Product";
@@ -14,10 +16,39 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     const data = localStorage.getItem("checkoutItems");
+
     if (data) {
-      const parsed: CheckoutItem[] = JSON.parse(data);
-      setItems(parsed);
-      localStorage.removeItem("checkoutItems");
+      try {
+        const raw = JSON.parse(data);
+
+        const converted: CheckoutItem[] = Array.isArray(raw)
+          ? raw.map((item: any) => ({
+              product: {
+                title: item.title ?? "",
+                link: "",
+                image: "",
+                lprice: String(item.price ?? "0"),
+                hprice: "",
+                mallName: "",
+                productId: item.productId ?? "",
+                productType: "",
+                brand: "",
+                maker: "",
+                category1: "",
+                category2: "",
+                category3: "",
+                category4: "",
+              },
+              quantity: item.quantity ?? 1,
+            }))
+          : [];
+
+        setItems(converted);
+      } catch (e) {
+        console.error("JSON 파싱 오류:", e);
+      } finally {
+        localStorage.removeItem("checkoutItems");
+      }
     }
   }, []);
 
